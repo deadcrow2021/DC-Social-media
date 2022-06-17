@@ -1,0 +1,13 @@
+{% extends 'posts/base.html' %}
+
+{% block content %}
+<div class="profile">
+    <h2>{{ profile.user.username }}</h2>
+    <p>{{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+    <p>{{ profile.user.email }}</p>
+    <img src="{{ profile.image.url }}">
+    {% if user.id == profile.user.id %}
+        <a href="{% url 'edit-profile' user.id %}"><p>Edit profile</p></a>
+    {% endif %}
+</div>
+{% endblock %}

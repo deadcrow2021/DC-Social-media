@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarkCrow SocialMedia</title>
+</head>
+<body>
+    <div class="navbar">
+        <p><a href="{% url 'index' %}">Home</a></p>
+        {% if user.is_authenticated %}
+            <p><a href="{% url 'profile' user.id %}">Profile</a></p>
+            <p><a href="{% url 'logout' %}">Logout</a></p>
+        {% else %}
+            <p><a href="{% url 'login' %}">Login</a></p>
+            <p><a href="{% url 'register' %}">Register</a></p>
+        {% endif %}
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    {% endif %}
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="footer">
+
+    </div>
+</body>
+</html>
