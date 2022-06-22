@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.db.models import Q
 from .models import Post
@@ -22,6 +23,7 @@ def post(request, post_id):
     return render(request, 'posts/post.html', context)
 
 
+@login_required
 def create_post(request):
     form = CreateUpdatePost()
     if request.method == 'POST':
@@ -35,20 +37,23 @@ def create_post(request):
     return render(request, 'posts/create_post.html', context)
 
 
+@login_required
 def update_post(request, post_id):
     post = Post.objects.get(pk=post_id)
     form = CreateUpdatePost(request.POST or None, instance=post)
     if form.is_valid():
         form.save()
         return redirect('index')
-    context = {'posts': post, 'form': form}
+    context = {'post': post, 'form': form}
+    print(post.author.id)
     return render(request, 'posts/update_post.html', context)
 
 
+@login_required
 def delete_post(request, post_id):
     post = Post.objects.get(pk=post_id)
     if request.POST:
         post.delete()
         return redirect('index')
-    context = {'posts': post}
+    context = {'post': post}
     return render(request, 'posts/delete_post.html', context)

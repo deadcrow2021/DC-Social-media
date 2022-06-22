@@ -23,7 +23,7 @@ def edit_profile(request, user_id):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('profile', args=user_id))
-    return render(request, 'users/edit_profile.html', {'form': form})
+    return render(request, 'users/edit_profile.html', {'profile': profile, 'form': form})
 
 
 def login_user(request):

@@ -3,10 +3,14 @@
 {% block content %}
 
     <h2>Update Post</h2>
-    <form method="POST" action="">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Update">
-    </form>
+    {% if user.is_authenticated and user.id == post.author.id and not user.is_anonymous %}
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Update">
+        </form>
+    {% else %}
+        <h3>Access denied.</h3>
+    {% endif %}
 
 {% endblock %}
