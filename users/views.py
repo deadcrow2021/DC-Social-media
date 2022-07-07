@@ -3,16 +3,27 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import EditProfile
 from .models import Profile
+from django.core.cache import cache
 
 @login_required
 def profile(request, user_id):
-    profile = Profile.objects.get(pk=user_id)
+    profile_from_cahce = user_id
+    
+    if cache.get(profile_from_cahce):
+        profile = cache.get(profile_from_cahce)
+    else:
+        try:
+            profile = Profile.objects.get(pk=user_id)
+            cache.set(profile_from_cahce, profile)
+        except Profile.DoesNotExist:
+                return HttpResponse('Error')
     return render(request, 'users/profile.html', {'profile': profile})
+
 
 @login_required
 def edit_profile(request, user_id):

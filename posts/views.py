@@ -1,8 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.db.models import Q
 from .models import Post
 from .forms import CreateUpdatePost
+from django.core.cache import cache
+
 
 def home(request):
     search_query = request.GET.get('search', '')
@@ -18,7 +21,18 @@ def home(request):
 
 
 def post(request, post_id):
-    post = Post.objects.get(pk=post_id)
+    post_from_cahce = post_id
+    
+    if cache.get(post_from_cahce):
+        post = cache.get(post_from_cahce)
+        print(cache.get(post_from_cahce), post_from_cahce)
+    else:
+        try:
+            post = Post.objects.get(pk=post_id)
+            cache.set(post_from_cahce, post)
+        except Post.DoesNotExist:
+                return HttpResponse('Error')
+            
     context = {'post': post}
     return render(request, 'posts/post.html', context)
 
