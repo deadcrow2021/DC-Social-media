@@ -1,13 +1,26 @@
 {% extends 'posts/base.html' %}
 
 {% block content %}
+
 <div class="profile">
-    <h2>{{ profile.user.username }}</h2>
-    <p>{{ profile.user.first_name }} {{ profile.user.last_name }}</p>
-    <p>{{ profile.user.email }}</p>
-    <img src="{{ profile.image.url }}">
-    {% if user.id == profile.user.id and not user.is_anonymous %}
-        <a href="{% url 'edit-profile' user.id %}"><p>Edit profile</p></a>
-    {% endif %}
+    <div class="card">
+        <div class="card-row">
+            <p>Username: {{ profile.user.username }}</p>
+        </div>
+        <div class="card-row">
+            <p>Name: {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+        </div>
+        <div class="card-row">
+            <p>Email: {{ profile.user.email }}</p>
+        </div>
+        <div class="card-row">
+            <img src="{{ profile.image.url }}">
+        </div>
+        <div class="card-row">
+            {% if user.id == profile.user.id and not user.is_anonymous %}
+                <p><a href="{% url 'edit-profile' user.id %}">Edit profile</a></p>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

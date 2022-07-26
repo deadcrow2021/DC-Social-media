@@ -25,7 +25,6 @@ def post(request, post_id):
     
     if cache.get(post_from_cahce):
         post = cache.get(post_from_cahce)
-        print(cache.get(post_from_cahce), post_from_cahce)
     else:
         try:
             post = Post.objects.get(pk=post_id)

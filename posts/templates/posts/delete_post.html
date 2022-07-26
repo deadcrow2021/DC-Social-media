@@ -1,14 +1,24 @@
 {% extends 'posts/base.html' %}
 
 {% block content %}
+<div class="title">
     <h2>Delete Post</h2>
+</div>
     {% if user.is_authenticated and user.id == post.author.id and not user.is_anonymous %}
+    <div class="form-block">  
         <form method="POST" action="">
             {% csrf_token %}
-            <input type="submit" value="Delete">
+            <div class="form-content">
+                <div class="form-field-block">
+                    <input type="submit" value="Delete">
+                </div>
+            </div>
         </form>
+    </div>
     {% else %}
+    <div class="title">
         <h3>Access denied.</h3>
+    </div>
     {% endif %}
 
 {% endblock %}

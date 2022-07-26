@@ -1,12 +1,23 @@
 {% extends 'posts/base.html' %}
 
 {% block content %}
-
-    <h2>Register</h2>
-    <form method="POST" action="{% url 'register' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
-    </form>
-
+    <div class="title">
+        <h2>Register</h2>
+    </div>
+    <div class="form-block">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="form-content">
+                {% for field in form %}
+                    <div class="form-field-block">
+                        <p>{{ field.label_tag }}</p>
+                        <p>{{ field }}</p>
+                    </div>
+                {% endfor %}
+                <div class="form-field-block">
+                    <input type="submit" value="Submit">
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock %}

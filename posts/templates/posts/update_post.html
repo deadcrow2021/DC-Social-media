@@ -1,16 +1,30 @@
 {% extends 'posts/base.html' %}
 
 {% block content %}
-
-    <h2>Update Post</h2>
+    <div class="title">
+        <h2>Update Post</h2>
+    </div>
     {% if user.is_authenticated and user.id == post.author.id and not user.is_anonymous %}
-        <form method="POST" action="">
+    <div class="form-block">    
+    <form method="POST" action="">
             {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Update">
+            <div class="form-content">
+                {% for field in form %}
+                    <div class="form-field-block">
+                        <p>{{ field.label_tag }}</p>
+                        <p>{{ field }}</p>
+                    </div>
+                {% endfor %}
+                <div class="form-field-block">
+                    <input type="submit" value="Update">
+                </div>
+            </div>
         </form>
+    </div>
     {% else %}
+    <div class="title">
         <h3>Access denied.</h3>
+    </div>
     {% endif %}
 
 {% endblock %}

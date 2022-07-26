@@ -1,26 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>DarkCrow SocialMedia</title>
 </head>
 <body>
     <div class="navbar">
-        <p><a href="{% url 'index' %}">Home</a></p>
-        {% if user.is_authenticated %}
-            <p><a href="{% url 'profile' user.id %}">Profile</a></p>
-            <p><a href="{% url 'logout' %}">Logout</a></p>
-        {% else %}
-            <p><a href="{% url 'login' %}">Login</a></p>
-            <p><a href="{% url 'register' %}">Register</a></p>
-        {% endif %}
+        <div class="navbar-row">
+            <div class="navbar-element navbar-1">
+                <p><a href="{% url 'index' %}">Home</a></p>
+            </div>
+            {% if user.is_authenticated %}
+                <div class="navbar-element">
+                    <p><a href="{% url 'profile' user.id %}">Profile</a></p>
+                </div>
+                <div class="navbar-element">
+                    <p><a href="{% url 'logout' %}">Logout</a></p>
+                </div>
+            {% else %}
+                <div class="navbar-element">
+                    <p><a href="{% url 'login' %}">Login</a></p>
+                </div>
+                <div class="navbar-element">
+                    <p><a href="{% url 'register' %}">Register</a></p>
+                </div>
+            {% endif %}
+
+            {% block navbar %}
+            {% endblock %}
+        </div>
     </div>
+
 
     {% if messages %}
         {% for message in messages %}
-            {{ message }}
+            <div class="message-block">
+                <div class="message-content">
+                    <p>{{ message }}</p>
+                </div>
+                <div class="message-content">
+                    <a href="">X</a>
+                </div>
+            </div>
         {% endfor %}
     {% endif %}
 
@@ -30,7 +55,6 @@
     </div>
 
     <div class="footer">
-
     </div>
 </body>
 </html>
