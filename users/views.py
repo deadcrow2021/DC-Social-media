@@ -66,8 +66,6 @@ def register_user(request):
             password = form.cleaned_data['password1']
             user = authenticate(request, username=username, password=password)
             login(request, user)
-            profile = Profile(id=request.user.id, user=request.user)
-            profile.save()
             messages.success(request, 'You was registered')
             return redirect('index')
     else:
