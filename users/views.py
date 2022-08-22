@@ -11,30 +11,45 @@ from .models import Profile
 from django.core.cache import cache
 
 @login_required
-def profile(request, user_id):
-    profile_from_cahce = user_id
+def profile(request, profile_id):
+    profile_from_cahce = profile_id
     
     if cache.get(profile_from_cahce):
         profile = cache.get(profile_from_cahce)
     else:
         try:
-            profile = Profile.objects.get(pk=user_id)
+            profile = Profile.objects.get(pk=profile_id)
             cache.set(profile_from_cahce, profile)
         except Profile.DoesNotExist:
-                return HttpResponse('Error')
+            return HttpResponse('Error')
     return render(request, 'users/profile.html', {'profile': profile})
 
 
 @login_required
+def subscribers_posts(request):
+    profile = Profile.objects.get(user=request.user)
+    subs = [Profile.objects.get(user=sub) for sub in profile.subscribers.all()]
+    posts_list = []
+    for sub in subs:
+        posts = sub.posts.all()
+        for post in posts:
+            posts_list.append(post)
+    posts_list.sort(key=lambda x: x.date_posted, reverse=True)
+    print(posts_list)
+    return render(request, 'users/subscriptions.html', {'posts': posts_list})
+
+
+@login_required
 def edit_profile(request, user_id):
-    profile = User.objects.get(pk=user_id)
-    form = EditProfile(instance=profile)
+    user_obj = User.objects.get(pk=request.user.id)
+    prof = Profile.objects.get(pk=user_id)
+    form = EditProfile(instance=user_obj)
     if request.method == 'POST':
-        form = EditProfile(request.POST, instance=profile)
+        form = EditProfile(request.POST, instance=user_obj)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('profile', args=user_id))
-    return render(request, 'users/edit_profile.html', {'profile': profile, 'form': form})
+            return HttpResponseRedirect(reverse('profile', args=(prof.id,)))
+    return render(request, 'users/edit_profile.html', {'user_obj': user_obj, 'form': form})
 
 
 def login_user(request):

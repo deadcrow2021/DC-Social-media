@@ -4,7 +4,7 @@
     <div class="title">
         <h2>Edit Profile</h2>
     </div>
-    {% if user.is_authenticated and user.id == profile.id and not user.is_anonymous %} 
+    {% if user.is_authenticated and user.id == user_obj.id and not user.is_anonymous %} 
         <div class="form-block">
             <form method="POST" action="">
                 {% csrf_token %}

@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import models
 from PIL import Image
+from users.models import Profile
 
 class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='posts', null=True, blank=True)
     title = models.CharField(max_length=100, blank=True, null=True)
     text = models.TextField(max_length=5000, blank=True, null=True)
     date_posted = models.DateTimeField(default=timezone.now)

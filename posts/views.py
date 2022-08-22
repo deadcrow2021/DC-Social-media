@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.db.models import Q
+
+from users.models import Profile
 from .models import Post
 from .forms import CreateUpdatePost
 from django.core.cache import cache
@@ -11,7 +13,7 @@ def home(request):
     search_query = request.GET.get('search', '')
     
     if search_query:
-        posts = Post.objects.filter(Q(author__username=search_query) | Q(title__icontains=search_query))    
+        posts = Post.objects.filter(Q(author__user__username=search_query) | Q(title__icontains=search_query))    
     else:
         posts = Post.objects.all()
     
@@ -30,7 +32,7 @@ def post(request, post_id):
             post = Post.objects.get(pk=post_id)
             cache.set(post_from_cahce, post)
         except Post.DoesNotExist:
-                return HttpResponse('Error')
+            return HttpResponse('Error')
             
     context = {'post': post}
     return render(request, 'posts/post.html', context)
@@ -43,7 +45,7 @@ def create_post(request):
         form = CreateUpdatePost(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user
+            post.author = Profile.objects.get(user=request.user)
             post.save()
             return redirect('index')
     context = {'form': form}

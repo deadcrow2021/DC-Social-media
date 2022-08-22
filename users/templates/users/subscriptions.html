@@ -1,0 +1,25 @@
+{% extends 'posts/base.html' %}
+
+{% block content %}
+    <div class="cards-container">
+        {% for post in posts %}
+            <div class="card">
+                <div class="card-row">
+                    <p><a href="{% url 'profile' post.author.id %}">{{ post.author.user }}</a></p>
+                </div>
+                <div class="card-row">
+                    <p><a href="{% url 'post' post.id %}">{{ post.title }}</a></p>
+                </div>
+                <div class="card-row">
+                    <img src="{{ post.image.url }}">
+                </div>
+                <div class="card-row">
+                    <p>{{ post.date_posted }}</p>
+                </div>
+                <div class="card-row">
+                    <p>{{ post.text }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

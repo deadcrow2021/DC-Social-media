@@ -16,7 +16,10 @@
             </div>
             {% if user.is_authenticated %}
                 <div class="navbar-element">
-                    <p><a href="{% url 'profile' user.id %}">Profile</a></p>
+                    <p><a href="{% url 'subscriptions' %}">Subscriptions</a></p>
+                </div>
+                <div class="navbar-element">
+                    <p><a href="{% url 'profile' user.profile.id %}">Profile</a></p>
                 </div>
                 <div class="navbar-element">
                     <p><a href="{% url 'logout' %}">Logout</a></p>
