@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Q
 
 from users.models import Profile
@@ -11,12 +10,11 @@ from django.core.cache import cache
 
 def home(request):
     search_query = request.GET.get('search', '')
-    
     if search_query:
-        posts = Post.objects.filter(Q(author__user__username=search_query) | Q(title__icontains=search_query))    
+        posts = Post.objects.filter(Q(author__user__username=search_query) | Q(title__icontains=search_query))
     else:
         posts = Post.objects.all()
-    
+
     ordering = ['-date_posted']
     context = {'posts': posts}
     return render(request, 'posts/index.html', context)
@@ -24,15 +22,12 @@ def home(request):
 
 def post(request, post_id):
     post_from_cahce = post_id
-    
+
     if cache.get(post_from_cahce):
         post = cache.get(post_from_cahce)
     else:
-        try:
-            post = Post.objects.get(pk=post_id)
-            cache.set(post_from_cahce, post)
-        except Post.DoesNotExist:
-            return HttpResponse('Error')
+        post = get_object_or_404(Post, pk=post_id)
+        cache.set(post_from_cahce, post)
             
     context = {'post': post}
     return render(request, 'posts/post.html', context)
@@ -60,7 +55,6 @@ def update_post(request, post_id):
         form.save()
         return redirect('index')
     context = {'post': post, 'form': form}
-    print(post.author.id)
     return render(request, 'posts/update_post.html', context)
 
 

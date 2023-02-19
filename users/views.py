@@ -35,7 +35,6 @@ def subscribers_posts(request):
         for post in posts:
             posts_list.append(post)
     posts_list.sort(key=lambda x: x.date_posted, reverse=True)
-    print(posts_list)
     return render(request, 'users/subscriptions.html', {'posts': posts_list})
 
 
@@ -48,7 +47,7 @@ def edit_profile(request, user_id):
         form = EditProfile(request.POST, instance=user_obj)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('profile', args=(prof.id,)))
+        return HttpResponseRedirect(reverse('profile', args=(prof.id,)))
     return render(request, 'users/edit_profile.html', {'user_obj': user_obj, 'form': form})
 
 
